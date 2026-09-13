@@ -1,54 +1,89 @@
-# Lorebiter
+# Lorebiter (Lore Arbiter)
 
-> **⚠️ WARNING:** This software is currently untested.
+> **⚠️ WARNING:** This software is currently under active development.
 
-Lorebiter is a private, browser-based roleplaying engine for personal use. Built with Next.js App Router, Drizzle ORM, PostgreSQL (local-first, with pgvector), and OpenRouter for LLM integration.
+**Lorebiter** is an AI-powered tabletop roleplaying game (RPG) simulator designed around a **persistent, evolving world state**. Rather than relying on simple stateless chat sessions, Lorebiter treats every location, NPC, historical event, character relationship, and observed fact as a living database entry that persists across sessions and dynamically shapes the narrative.
 
+---
 
-## Features
-- **World Management**: Create, export, and import complete self-contained worlds as JSON backups. Paste raw JSON directly for rapid generation from external AIs. Safely cascade-delete entire worlds.
-- **Dynamic Model Selection**: Connects live to OpenRouter to let you seamlessly swap between hundreds of LLMs per-session using a searchable dropdown.
-- **Rich Lore Entries**: Define diverse lore entries (characters, events, facts, locations, relationships) using dynamic templates and layered visibility (public, personal, observable).
-- **Multi-NPC Orchestration**: Engage in dynamic chat sessions supporting multiple NPCs. The Game Engine accurately parses conversational intents and prevents the narrator from bypassing characters.
-- **Consistency Enforcement**: An Arbiter tracks observed facts to detect contradictions, gracefully handling lies and misremembered statements without breaking immersion.
-- **Semantic RAG & Triggers**: Uses vector embeddings to semantically query and dynamically inject the most relevant lore entries into context.
-- **Session Search**: Search past chat logs by semantic meaning to retrieve distant memories.
-- **Long-term Memory**: Automatically summarize completed chat sessions into new permanent lore entries.
-- **Inner Thoughts**: Characters generate hidden internal reasoning that guides their actions, viewable via an Insight toggle.
-- **Visual Lore Graph**: Visualize relationships between lore entries and detect orphaned nodes.
-- **AI Polish & Quick Entry**: Use NLP to convert raw text dumps into structured lore entries and polish existing drafts.
-- **Narrator & Anti-Hijack**: A World Narrator manages the environment and transitions, while strict prompts ensure agents never hijack your actions or repeat setting descriptions unnecessarily.
+## 🌟 Key Concepts
 
-## Getting Started
+### 🏛️ Persistent World State
+In traditional AI roleplay, long chats suffer from context decay, forgotten facts, and hallucinated continuity. Lorebiter fixes this by maintaining a persistent relational state:
+- **Living World Engine**: Every action, NPC interaction, and session summary mutates and evolves the world state.
+- **Fact Tracking & Contradiction Resolution**: An internal *Arbiter* evaluates narrative outcomes, tracks observed facts, and prevents narrative inconsistencies without breaking immersion.
+- **Long-term Memory & Vector Search**: Past sessions are automatically summarized into persistent lore entries, while vector embeddings (`pgvector`) retrieve distant memories and inject relevant context on-demand.
 
-1. **Clone and Install**
-   ```bash
-   npm install
-   ```
+### 🎭 RPG Simulation & Multi-NPC Orchestration
+- **Dynamic Multi-NPC Sessions**: Speak with multiple NPCs concurrently in a single scene. The Game Engine dynamically routes conversational intent and prevents narrator or character hijacking.
+- **Inner Thoughts & Insight**: Characters maintain hidden internal reasoning loops that govern their actions, decisions, and emotional states, inspectable via an Insight toggle.
+- **World Narrator**: A dedicated narrator handles environmental descriptions, temporal transitions, and scene pacing.
 
-2. **Environment Setup**
-   Copy the example environment file and fill in your credentials.
-   ```bash
-   cp .env.example .env.local
-   ```
-   You will need:
-   - A local PostgreSQL database URL (`DATABASE_URL`) with `pgvector` enabled, e.g., `postgres://user:password@localhost:5432/lorebiter`. (Alternatively, you can use a cloud database like [Neon](https://neon.tech)).
-   - An [OpenRouter](https://openrouter.ai) API key (`OPENROUTER_API_KEY`).
+---
 
-3. **Database Push**
-   Push the schema to your database:
-   ```bash
-   npx drizzle-kit push
-   ```
+## ✨ Features
 
-4. **Run Development Server**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) to start playing.
+- **World Management**: Create, export, and import complete self-contained worlds as JSON backups. Paste raw JSON directly for rapid world generation from external AIs.
+- **Dynamic Model Selection**: Live integration with [OpenRouter](https://openrouter.ai) allows swapping between hundreds of LLMs per-session.
+- **Rich Lore Database**: Define characters, locations, factions, items, and historical events with layered visibility (public, personal, observable).
+- **Visual Lore Graph**: Visualize complex webs of character relationships and world connections in an interactive 2D graph.
+- **Semantic RAG & Triggers**: Contextually query lore entries using vector embeddings (`pgvector`) and inject pertinent world rules into the prompt.
+- **AI Lore Polish & Assistance**: Process unstructured notes or text dumps into cleanly structured lore entries using integrated NLP polish tools.
 
-## Deployment
+---
 
-Lorebiter is designed to be easily deployed to Vercel on the free tier.
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js](https://nextjs.org/) (App Router)
+- **Database & ORM**: PostgreSQL with `pgvector` extension via [Drizzle ORM](https://orm.drizzle.team/)
+- **Auth**: Neon Auth (`@neondatabase/auth`)
+- **AI Integration**: OpenRouter API & Vector Embeddings
+- **UI & Graphing**: React 19, Tailwind CSS v4, Lucide Icons, `react-force-graph-2d`
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- Node.js 20+ installed.
+- A PostgreSQL database with `pgvector` support enabled (e.g., local PostgreSQL with `pgvector` or [Neon](https://neon.tech)).
+- An [OpenRouter](https://openrouter.ai) API Key.
+
+### 2. Clone and Install
+```bash
+git clone https://github.com/vxnus-studio/lorebiter.git
+cd lorebiter
+npm install
+```
+
+### 3. Environment Setup
+Copy the example environment file:
+```bash
+cp .env.example .env.local
+```
+Fill in your configuration details in `.env.local`:
+```env
+DATABASE_URL="postgres://user:password@localhost:5432/lorebiter"
+OPENROUTER_API_KEY="your-openrouter-api-key"
+```
+
+### 4. Database Schema Migration
+Push the Drizzle schema to your database:
+```bash
+npx drizzle-kit push
+```
+
+### 5. Run Development Server
+Start the Next.js development server:
+```bash
+npm run dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser to start building your world and playing!
+
+---
+
+## 📄 Deployment
+
+Lorebiter is fully compatible with Vercel and serverless PostgreSQL providers like Neon.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
